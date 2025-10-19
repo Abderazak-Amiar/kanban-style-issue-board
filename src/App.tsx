@@ -1,8 +1,8 @@
-import Login from './components/pages/login';
+import IndexRouter from './components/router/IndexRouter';
 import './styles/App.css';
 
 function App() {
-  return <Login />;
+  return <IndexRouter />;
 }
 
 export default App;

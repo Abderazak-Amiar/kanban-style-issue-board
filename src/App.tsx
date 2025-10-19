@@ -1,11 +1,8 @@
-import './App.css'
+import IndexRouter from './components/router/IndexRouter';
+import './styles/App.css';
 
 function App() {
-  return (
-    <>
-
-    </>
-  )
+  return <IndexRouter />;
 }
 
-export default App
+export default App;

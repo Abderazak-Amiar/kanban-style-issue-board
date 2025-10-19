@@ -1,7 +1,7 @@
 import AuthLayout from '../layouts/AuthLayout';
 import LoginForm from '../moleculs/LoginForm';
 
-function login() {
+function Login() {
   return (
     <AuthLayout>
       <LoginForm />
@@ -9,4 +9,4 @@ function login() {
   );
 }
 
-export default login;
+export default Login;

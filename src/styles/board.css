@@ -1,0 +1,52 @@
+.board-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.board-header h1 {
+  margin: 0;
+}
+.board-header button {
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.retry-btn {
+  background-color: #ff5a5a !important;
+  border: 1px solid #000000 !important;
+  width: 80px !important;
+  margin-bottom: 1rem;
+}
+.retry-btn:hover {
+  background-color: #ff7878;
+}
+
+.undo-last-move {
+  width: 200px !important;
+}
+.undo-last-move-container {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+}
+.error {
+  text-align: center;
+}
+.fixed-issue-header {
+  background-color: #ff5a5a;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  position: fixed;
+  top: 0;
+  z-index: 100;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}

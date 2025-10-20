@@ -1,8 +1,8 @@
 import { useIssuesStore } from '../../store/useIssuesStore';
+import '../../styles/boardColumn.css';
 import type { BoardColumnProps, Issue } from '../../types';
 import ColumnHeader from '../moleculs/ColumnHeader';
 import IssueCard from '../moleculs/IssueCard';
-
 export default function BoardColumn({ status, statuses }: BoardColumnProps) {
   const { issues, moveIssue } = useIssuesStore();
 
@@ -11,23 +11,16 @@ export default function BoardColumn({ status, statuses }: BoardColumnProps) {
   );
 
   return (
-    <div
-      style={{
-        flex: 1,
-        padding: 10,
-        background: '#f5f5f5',
-        borderRadius: 6,
-        minHeight: '70vh',
-      }}
-    >
+    <div className="board-column-container">
       <ColumnHeader title={status} />
-      {filtered.map((issue) => (
+      {filtered.map((i) => (
         <IssueCard
-          key={issue.id}
-          id={issue.id}
-          title={issue.title}
-          description={issue.description}
-          status={issue.status}
+          key={i.id}
+          id={i.id}
+          title={i.title}
+          description={i.description}
+          status={i.status}
+          priority={i.priority}
           statuses={statuses}
           onMove={moveIssue}
         />

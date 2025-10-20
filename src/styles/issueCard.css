@@ -14,6 +14,17 @@
   border-radius: 4px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   color: #333;
+  cursor: pointer;
+}
+.issue-card-container:hover {
+  background-color: #f5f5f5;
+  padding: 10px;
+  margin-bottom: 8px;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  color: #333;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
 }
 .ic-title-status-container {
   display: flex;
@@ -28,4 +39,10 @@
   display: flex;
   gap: 8px;
   justify-content: space-between;
+}
+.ic-badges {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: end;
 }

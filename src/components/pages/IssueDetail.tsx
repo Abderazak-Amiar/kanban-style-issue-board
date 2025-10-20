@@ -36,6 +36,7 @@ export default function IssueDetail() {
 
   const isAdmin = role === 'admin';
   const canResolve = isAdmin && issue.status !== 'Done';
+  const canEditPriority = isAdmin && issue.status !== 'Done';
 
   return (
     <div className="issue-detail">
@@ -50,36 +51,34 @@ export default function IssueDetail() {
         <h2 className="issue-detail__title">{issue.title}</h2>
 
         <div className="issue-detail__actions">
-          {isAdmin && (
-            <>
-              {canResolve && (
-                <button
-                  className="issue-detail__resolve-btn"
-                  onClick={() => moveIssue(issue.id, 'Done')}
-                  title="Mark this issue as resolved"
-                >
-                  Mark as Resolved
-                </button>
-              )}
+          {canResolve && (
+            <button
+              className="issue-detail__resolve-btn"
+              onClick={() => moveIssue(issue.id, 'Done')}
+              title="Mark this issue as resolved"
+            >
+              Mark as Resolved
+            </button>
+          )}
 
-              <div
-                className="select-wrapper"
-                data-priority={(issue.priority || '').toLowerCase()}
+          {canEditPriority && (
+            <div
+              className="select-wrapper"
+              data-priority={(issue.priority || '').toLowerCase()}
+            >
+              <select
+                className={`issue-detail__priority-select priority--${(
+                  issue.priority || ''
+                ).toLowerCase()}`}
+                aria-label="Update priority"
+                value={issue.priority}
+                onChange={(e) => updatePriority(issue.id, e.target.value)}
               >
-                <select
-                  className={`issue-detail__priority-select priority--${(
-                    issue.priority || ''
-                  ).toLowerCase()}`}
-                  aria-label="Update priority"
-                  value={issue.priority}
-                  onChange={(e) => updatePriority(issue.id, e.target.value)}
-                >
-                  <option value="low">Low</option>
-                  <option value="medium">Medium</option>
-                  <option value="high">High</option>
-                </select>
-              </div>
-            </>
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+              </select>
+            </div>
           )}
         </div>
       </div>

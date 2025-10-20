@@ -7,12 +7,10 @@ import {
   useLocation,
 } from 'react-router-dom';
 import { useAuthStore } from '../../store/useAuthStore';
-import { default as AdminBoard } from '../pages/AdminBoard';
-import ContributorBoard from '../pages/ContributorBoard';
+import Board from '../pages/Board';
 import Login from '../pages/login';
 
-const getHomePath = (role?: string | null) =>
-  role === 'admin' ? '/admin' : '/contributor';
+const getHomePath = () => '/board';
 
 const RequireAuth: React.FC<{
   children: React.ReactElement;
@@ -26,22 +24,18 @@ const RequireAuth: React.FC<{
   }
 
   if (allowedRoles && (!role || !allowedRoles.includes(role))) {
-    // Send users to their role home instead of looping on "/"
-    return <Navigate to={getHomePath(role)} replace />;
+    return <Navigate to={getHomePath()} replace />;
   }
-
   return children;
 };
-
 // Prevents authenticated users from visiting public-only routes (e.g., login)
 const PublicOnly: React.FC<{ children: React.ReactElement }> = ({
   children,
 }) => {
-  const { isAuthenticated, role } = useAuthStore();
-  if (isAuthenticated) return <Navigate to={getHomePath(role)} replace />;
+  const { isAuthenticated } = useAuthStore();
+  if (isAuthenticated) return <Navigate to={getHomePath()} replace />;
   return children;
 };
-
 const AppRouter: React.FC = () => {
   return (
     <BrowserRouter>
@@ -55,32 +49,24 @@ const AppRouter: React.FC = () => {
             </PublicOnly>
           }
         />
+        {/* Redirect root to /board */}
+        <Route path="/" element={<Navigate to="/board" replace />} />
 
-        {/* Redirect root to contributor */}
-        <Route path="/" element={<Navigate to="/contributor" replace />} />
-
-        {/* Contributor home */}
+        {/* Single protected board for both roles */}
         <Route
-          path="/contributor"
+          path="/board"
           element={
-            <RequireAuth allowedRoles={['contributor']}>
-              <ContributorBoard />
+            <RequireAuth>
+              <Board />
             </RequireAuth>
           }
         />
-
-        {/* Admin home (distinct path) */}
-        <Route
-          path="/admin"
-          element={
-            <RequireAuth allowedRoles={['admin']}>
-              <AdminBoard />
-            </RequireAuth>
-          }
-        />
+        {/* Backward-compat: redirect old role paths to /board */}
+        <Route path="/admin" element={<Navigate to="/board" replace />} />
+        <Route path="/contributor" element={<Navigate to="/board" replace />} />
 
         {/* Fallback */}
-        <Route path="*" element={<Navigate to="/contributor" replace />} />
+        <Route path="*" element={<Navigate to="/board" replace />} />
       </Routes>
     </BrowserRouter>
   );

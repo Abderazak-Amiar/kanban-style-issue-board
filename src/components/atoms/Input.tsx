@@ -8,5 +8,6 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
   }
 );
 
+// Set displayName for better debugging experience in React DevTools
 Input.displayName = 'Input';
 export default Input;

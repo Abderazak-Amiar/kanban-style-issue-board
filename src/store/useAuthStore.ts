@@ -1,6 +1,6 @@
 import { create } from 'zustand';
+import { currentUser } from '../constants/currentUser';
 import type { AuthState } from '../types';
-import { currentUser } from '../utils/api';
 
 export const useAuthStore = create<AuthState>((set) => ({
   isAuthenticated:

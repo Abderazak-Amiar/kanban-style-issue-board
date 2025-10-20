@@ -1,6 +1,5 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/useAuthStore';
-import { useIssueHistoryStore } from '../../store/useIssueHistoryStore';
 import '../../styles/issueCard.css';
 import type { IssueCardProps } from '../../types';
 import Button from '../atoms/Button';
@@ -14,18 +13,15 @@ export default function IssueCard({
   status,
   onMove,
   statuses,
-  priority, // <— add this prop
+  priority,
 }: IssueCardProps) {
   const { isAuthenticated, role } = useAuthStore();
   const navigate = useNavigate();
   const location = useLocation();
-  const addHistory = useIssueHistoryStore((s) => s.add);
-
   return (
     <div
       className="issue-card-container"
       onClick={() => {
-        addHistory({ id, title, status });
         navigate(`/issue/${id}`, { state: { backgroundLocation: location } });
       }}
       role="button"

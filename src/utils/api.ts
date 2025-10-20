@@ -27,3 +27,9 @@ export async function saveIssueStatus(id: number, status: Issue['status']) {
   console.log(`Saving issue ${id} with status: ${status}`);
   maybeThrowError(); // reuse 20% failure simulation
 }
+
+export async function saveIssuePriority(id: number, priority: string) {
+  await delay(500);
+  maybeThrowError(); // simulate random failure like fetchIssues
+  console.log(`Saving issue ${id} priority: ${priority}`);
+}

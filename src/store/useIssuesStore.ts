@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import type { Issue, State } from '../types';
-import { fetchIssues, saveIssueStatus } from '../utils/api';
+import { fetchIssues, saveIssuePriority, saveIssueStatus } from '../utils/api';
 
 const UNDO_WINDOW_MS = 5000;
 
@@ -17,6 +17,7 @@ export const useIssuesStore = create<State>((set, get) => ({
       const typedData = data.map((issue) => ({
         ...issue,
         status: issue.status as Issue['status'],
+        priority: issue.priority as Issue['priority'],
       }));
       set({ issues: typedData, loading: false, error: null });
     } catch (e) {
@@ -46,6 +47,19 @@ export const useIssuesStore = create<State>((set, get) => ({
         issues: prev,
         lastMoved: null,
         error: e instanceof Error ? e.message : 'Failed to save change',
+      });
+    });
+  },
+
+  updatePriority: (id: number, priority: string) => {
+    const prev = get().issues;
+    const updated = prev.map((i) => (i.id === id ? { ...i, priority: priority as Issue['priority'] } : i));
+    set({ issues: updated, error: null });
+
+    saveIssuePriority(id, priority).catch((e) => {
+      set({
+        issues: prev,
+        error: e instanceof Error ? e.message : 'Failed to update priority',
       });
     });
   },

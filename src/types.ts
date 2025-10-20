@@ -15,10 +15,13 @@ export type Issue = {
   title: string;
   description: string;
   status: 'Backlog' | 'In Progress' | 'Done';
-  priority: string;
+  priority: 'low' | 'medium' | 'high';
   assignee: string;
   createdAt: string;
   updatedAt: string;
+  severity: number;
+  userDefinedRank: number;
+  score: number;
 };
 
 export type State = {
@@ -29,6 +32,7 @@ export type State = {
   lastMoved: { id: number; previousStatus: Issue['status']; at: number } | null;
   loading: boolean;
   error: string | null;
+  updatePriority: (id: number, priority: string) => void;
 };
 export type BoardColumnProps = {
   status: 'Backlog' | 'In Progress' | 'Done';
@@ -37,12 +41,26 @@ export type BoardColumnProps = {
 export type IssueCardProps = {
   id: number;
   title: string;
-  description: string;
+  description?: string;
   status: 'Backlog' | 'In Progress' | 'Done';
-  onMove: (id: number, newStatus: 'Backlog' | 'In Progress' | 'Done') => void;
-  statuses: ('Backlog' | 'In Progress' | 'Done')[];
+  priority: 'low' | 'medium' | 'high'; // <— added
+  statuses: readonly string[];
+  onMove: (id: number, status: 'Backlog' | 'In Progress' | 'Done') => void;
 };
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
 export type IssueTitleProps = { children: React.ReactNode };
 export type SelectProps = React.SelectHTMLAttributes<HTMLSelectElement>;
+export type ModalProps = {
+  children: React.ReactNode;
+  onClose: () => void;
+};
+export type Priority = 'low' | 'medium' | 'high';
+export type HistoryItem = Pick<Issue, 'id' | 'title' | 'status'> & {
+  clickedAt: string; // ISO timestamp
+};
 
+export type IssueHistoryState = {
+  items: HistoryItem[];
+  add: (issue: Pick<Issue, 'id' | 'title' | 'status'>) => void;
+  clear: () => void;
+};

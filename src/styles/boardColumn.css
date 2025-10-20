@@ -1,0 +1,7 @@
+.board-column-container {
+  flex: 1;
+  padding: 10px;
+  background: #f5f5f5;
+  border-radius: 6px;
+  min-height: 70vh;
+}

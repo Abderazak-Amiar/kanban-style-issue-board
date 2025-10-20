@@ -5,9 +5,12 @@ import {
   Route,
   Routes,
   useLocation,
+  useNavigate,
 } from 'react-router-dom';
 import { useAuthStore } from '../../store/useAuthStore';
-import Board from '../pages/Board';
+import Modal from '../moleculs/Modal';
+import BoardPage from '../pages/Board';
+import IssueDetail from '../pages/IssueDetail';
 import Login from '../pages/login';
 
 const getHomePath = () => '/board';
@@ -22,13 +25,12 @@ const RequireAuth: React.FC<{
   if (!isAuthenticated) {
     return <Navigate to="/login" replace state={{ from: location }} />;
   }
-
   if (allowedRoles && (!role || !allowedRoles.includes(role))) {
     return <Navigate to={getHomePath()} replace />;
   }
   return children;
 };
-// Prevents authenticated users from visiting public-only routes (e.g., login)
+
 const PublicOnly: React.FC<{ children: React.ReactElement }> = ({
   children,
 }) => {
@@ -36,11 +38,18 @@ const PublicOnly: React.FC<{ children: React.ReactElement }> = ({
   if (isAuthenticated) return <Navigate to={getHomePath()} replace />;
   return children;
 };
-const AppRouter: React.FC = () => {
+
+function RoutesWithModals() {
+  const location = useLocation();
+  const state = location.state as { backgroundLocation?: Location } | undefined;
+  const navigate = useNavigate();
+
   return (
-    <BrowserRouter>
-      <Routes>
-        {/* Public route */}
+    <>
+      {/* Render the normal routes, but if we came from a link that set backgroundLocation,
+          use it so the underlying page stays visible */}
+      <Routes location={state?.backgroundLocation || location}>
+        {/* Public */}
         <Route
           path="/login"
           element={
@@ -49,25 +58,56 @@ const AppRouter: React.FC = () => {
             </PublicOnly>
           }
         />
+
         {/* Redirect root to /board */}
         <Route path="/" element={<Navigate to="/board" replace />} />
 
-        {/* Single protected board for both roles */}
+        {/* Private board */}
         <Route
           path="/board"
           element={
             <RequireAuth>
-              <Board />
+              <BoardPage />
             </RequireAuth>
           }
         />
-        {/* Backward-compat: redirect old role paths to /board */}
-        <Route path="/admin" element={<Navigate to="/board" replace />} />
-        <Route path="/contributor" element={<Navigate to="/board" replace />} />
 
-        {/* Fallback */}
+        {/* Full-page fallback if someone hits the detail URL directly (no backgroundLocation) */}
+        <Route
+          path="/issue/:id"
+          element={
+            <RequireAuth>
+              <IssueDetail />
+            </RequireAuth>
+          }
+        />
+
         <Route path="*" element={<Navigate to="/board" replace />} />
       </Routes>
+
+      {/* If we have a background page, render the IssueDetail as a modal on top */}
+      {state?.backgroundLocation && (
+        <Routes>
+          <Route
+            path="/issue/:id"
+            element={
+              <RequireAuth>
+                <Modal onClose={() => navigate(-1)}>
+                  <IssueDetail />
+                </Modal>
+              </RequireAuth>
+            }
+          />
+        </Routes>
+      )}
+    </>
+  );
+}
+
+const AppRouter: React.FC = () => {
+  return (
+    <BrowserRouter>
+      <RoutesWithModals />
     </BrowserRouter>
   );
 };

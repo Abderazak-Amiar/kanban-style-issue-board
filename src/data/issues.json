@@ -251,7 +251,7 @@
     "title": "Add audit trail",
     "description": "Record critical user actions.",
     "status": "Backlog",
-    "priority": "low",
+    "priority": "high",
     "severity": 4,
     "userDefinedRank": 3,
     "assignee": "Jane Smith",

@@ -10,19 +10,24 @@ export type AuthState = {
   login: (username: string, role: string) => boolean;
   logout: () => void;
 };
+export type Status = 'Backlog' | 'In Progress' | 'Done';
+export type Priority = 'low' | 'medium' | 'high';
+
 export type Issue = {
   id: number;
   title: string;
-  description: string;
-  status: 'Backlog' | 'In Progress' | 'Done';
-  priority: 'low' | 'medium' | 'high';
-  assignee: string;
-  createdAt: string;
-  updatedAt: string;
+  description?: string;
+  status: Status;
+  priority: Priority;
   severity: number;
   userDefinedRank: number;
-  score: number;
+  assignee: string;
+  createdAt: string;
+  updatedAt?: string;
+  score: number; // computed at runtime
 };
+
+export type RawIssue = Omit<Issue, 'score'>;
 
 export type State = {
   issues: Issue[];
@@ -37,13 +42,15 @@ export type State = {
 export type BoardColumnProps = {
   status: 'Backlog' | 'In Progress' | 'Done';
   statuses: ('Backlog' | 'In Progress' | 'Done')[];
+  children?: React.ReactNode;
 };
 export type IssueCardProps = {
   id: number;
   title: string;
   description?: string;
   status: 'Backlog' | 'In Progress' | 'Done';
-  priority: 'low' | 'medium' | 'high'; // <— added
+  priority: 'low' | 'medium' | 'high';
+  score: number;
   statuses: readonly string[];
   onMove: (id: number, status: 'Backlog' | 'In Progress' | 'Done') => void;
 };
@@ -54,7 +61,6 @@ export type ModalProps = {
   children: React.ReactNode;
   onClose: () => void;
 };
-export type Priority = 'low' | 'medium' | 'high';
 export type HistoryItem = Pick<Issue, 'id' | 'title' | 'status'> & {
   clickedAt: string; // ISO timestamp
 };

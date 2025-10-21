@@ -1,17 +1,7 @@
 import { create } from 'zustand';
+import type { StateSearch } from '../types';
 
-type State = {
-  query: string;
-  assignee: string; // '' = any
-  severity: number | null; // null = any
-  setQuery: (q: string) => void;
-  setAssignee: (a: string) => void;
-  setSeverity: (s: number | null) => void;
-  clear: () => void;
-  clearFilters: () => void;
-};
-
-export const useSearchStore = create<State>((set) => ({
+export const useSearchStore = create<StateSearch>((set) => ({
   query: '',
   assignee: '',
   severity: null,

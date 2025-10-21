@@ -2,10 +2,21 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/useAuthStore';
 import { useIssueHistoryStore } from '../../store/useIssueHistoryStore';
 import '../../styles/issueCard.css';
-import type { IssueCardProps } from '../../types';
 import IssueTitle from '../atoms/IssueTitle';
 import PriorityBadge from '../atoms/PriorityBadge';
 import StatusTag from '../atoms/StatusTag';
+
+type IssueCardProps = {
+  id: number;
+  title: string;
+  description?: string;
+  status: 'Backlog' | 'In Progress' | 'Done';
+  priority: 'low' | 'medium' | 'high';
+  statuses: readonly string[];
+  onMove: (id: number, status: 'Backlog' | 'In Progress' | 'Done') => void;
+  score?: number;
+  tags?: string[];
+};
 
 export default function IssueCard({
   id,
@@ -16,6 +27,7 @@ export default function IssueCard({
   statuses,
   priority,
   score,
+  tags = [],
 }: IssueCardProps) {
   const { isAuthenticated, role } = useAuthStore();
   const navigate = useNavigate();
@@ -35,7 +47,17 @@ export default function IssueCard({
       <div className="ic-title-status-container">
         <div>
           <IssueTitle>{title}</IssueTitle>
+          {tags.length > 0 && (
+            <div className="ic-tags">
+              {tags.map((t) => (
+                <span key={t} className="tag-chip">
+                  #{t}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
+
         <div className="ic-badges">
           <StatusTag status={status} />
           <PriorityBadge priority={priority as 'low' | 'medium' | 'high'} />

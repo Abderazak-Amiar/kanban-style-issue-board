@@ -1,0 +1,128 @@
+.ih-sidebar {
+  position: fixed;
+  inset: 0 auto 0 0; /* left, full height */
+  width: 280px;
+  background: #ffffff;
+  border-right: 1px solid #e5e7eb;
+  padding: 12px;
+  overflow-y: auto;
+  z-index: 900;
+}
+
+.ih-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.ih-header h3 {
+  margin: 0;
+  font-size: 14px;
+  color: #111827;
+}
+.ih-clear {
+  appearance: none;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  color: #374151;
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.ih-clear:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.ih-list {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 0;
+}
+.ih-empty {
+  color: #6b7280;
+  padding: 8px 0;
+}
+.ih-item {
+  padding: 10px 6px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.ih-item:hover {
+  background: #f8fafc;
+}
+
+.ih-title {
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+
+.ih-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #6b7280;
+}
+.ih-reason {
+  text-transform: capitalize;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  border: 1px solid #e5e7eb;
+  background: #f3f4f6;
+  color: #374151;
+}
+.ih-reason--updated {
+  background: #eef2ff;
+  border-color: #e0e7ff;
+  color: #3730a3;
+}
+.ih-reason--clicked {
+  background: #ecfeff;
+  border-color: #cffafe;
+  color: #155e75;
+}
+
+.ih-dot {
+  color: #cbd5e1;
+}
+.ih-status {
+  color: #334155;
+}
+
+.ih-priority {
+  margin-left: 4px;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  border: 1px solid transparent;
+  font-weight: 600;
+}
+.ih-priority--high {
+  color: #dc2626;
+  background: #fee2e2;
+  border-color: #fecaca;
+}
+.ih-priority--medium {
+  color: #f97316;
+  background: #ffedd5;
+  border-color: #fed7aa;
+}
+.ih-priority--low {
+  color: #16a34a;
+  background: #dcfce7;
+  border-color: #bbf7d0;
+}
+
+.ih-time {
+  color: #64748b;
+  margin-left: auto;
+}
+.ih-spacer {
+  flex: 1;
+}
+
+/* Push main content to the right of the fixed sidebar */
+body .with-left-sidebar {
+  margin-left: 280px;
+}

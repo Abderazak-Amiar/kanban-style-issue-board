@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import type { Issue, State } from '../types';
 import { fetchIssues, saveIssuePriority, saveIssueStatus } from '../utils/api';
+import { useIssueHistoryStore } from './useIssueHistoryStore';
 
 const UNDO_WINDOW_MS = 5000;
 
@@ -31,15 +32,26 @@ export const useIssuesStore = create<State>((set, get) => ({
   moveIssue: (id, newStatus) => {
     const prev = get().issues;
     const movedIssue = prev.find((i) => i.id === id);
+    const updated = prev.map((issue) =>
+      issue.id === id ? { ...issue, status: newStatus } : issue
+    );
 
-    // optimistic update
     set({
-      issues: prev.map((i) => (i.id === id ? { ...i, status: newStatus } : i)),
+      issues: updated,
       lastMoved: movedIssue
         ? { id, previousStatus: movedIssue.status, at: Date.now() }
         : null,
-      error: null,
     });
+
+    // Track as "updated" in history
+    if (movedIssue) {
+      useIssueHistoryStore.getState().addUpdated({
+        id,
+        title: movedIssue.title,
+        status: newStatus as any,
+        priority: movedIssue.priority as any,
+      });
+    }
 
     // simulate save; rollback on failure
     saveIssueStatus(id, newStatus).catch((e) => {
@@ -53,8 +65,20 @@ export const useIssuesStore = create<State>((set, get) => ({
 
   updatePriority: (id: number, priority: string) => {
     const prev = get().issues;
-    const updated = prev.map((i) => (i.id === id ? { ...i, priority: priority as Issue['priority'] } : i));
+    const issue = prev.find((i) => i.id === id);
+    const updated = prev.map((i) =>
+      i.id === id ? { ...i, priority: priority as Issue['priority'] } : i
+    );
     set({ issues: updated, error: null });
+
+    if (issue) {
+      useIssueHistoryStore.getState().addUpdated({
+        id,
+        title: issue.title,
+        status: issue.status as any,
+        priority,
+      });
+    }
 
     saveIssuePriority(id, priority).catch((e) => {
       set({

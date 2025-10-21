@@ -1,11 +1,12 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/useAuthStore';
+import { useIssueHistoryStore } from '../../store/useIssueHistoryStore';
 import '../../styles/issueCard.css';
-import type { IssueCardProps } from '../../types';
-import Button from '../atoms/Button';
+import type { IssueCardProps, Priority } from '../../types';
 import IssueTitle from '../atoms/IssueTitle';
 import PriorityBadge from '../atoms/PriorityBadge';
 import StatusTag from '../atoms/StatusTag';
+
 export default function IssueCard({
   id,
   title,
@@ -18,10 +19,13 @@ export default function IssueCard({
   const { isAuthenticated, role } = useAuthStore();
   const navigate = useNavigate();
   const location = useLocation();
+  const addClicked = useIssueHistoryStore((s) => s.addClicked);
+
   return (
     <div
       className="issue-card-container"
       onClick={() => {
+        addClicked({ id, title, status, priority });
         navigate(`/issue/${id}`, { state: { backgroundLocation: location } });
       }}
       role="button"
@@ -33,17 +37,18 @@ export default function IssueCard({
         </div>
         <div className="ic-badges">
           <StatusTag status={status} />
-          <PriorityBadge priority={priority as 'low' | 'medium' | 'high'} />
+          <PriorityBadge priority={priority as Priority} />
         </div>
       </div>
-      <p className="ic-description">{description}</p>
+
+      {description && <p className="ic-description">{description}</p>}
 
       {isAuthenticated && role === 'admin' && (
         <div className="ic-buttons-container">
           {statuses
             .filter((s) => s !== status)
             .map((s) => (
-              <Button
+              <button
                 className="moveto-btn"
                 key={s}
                 onClick={(e) => {
@@ -52,7 +57,7 @@ export default function IssueCard({
                 }}
               >
                 Move to {s}
-              </Button>
+              </button>
             ))}
         </div>
       )}

@@ -261,3 +261,10 @@
   color: #16a34a; /* green */
   border-color: #bbf7d0;
 }
+
+.issue-detail__section-title {
+  margin: 16px 0 6px;
+  font-size: 14px;
+  line-height: 1.4;
+  color: #111827;
+}

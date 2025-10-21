@@ -1,33 +1,39 @@
 import { useIssuesStore } from '../../store/useIssuesStore';
 import '../../styles/boardColumn.css';
-import type { BoardColumnProps } from '../../types';
-import { compareIssuesByScoreThenRecency } from '../../utils/score';
-import ColumnHeader from '../moleculs/ColumnHeader';
+import { matchesIssue } from '../../utils/search';
 import IssueCard from '../moleculs/IssueCard';
 
-export default function BoardColumn({ status, statuses }: BoardColumnProps) {
+export default function BoardColumn({
+  status,
+  statuses,
+  query,
+}: {
+  status: string;
+  statuses: string[];
+  query: string;
+}) {
   const { issues, moveIssue } = useIssuesStore();
 
+  const issuesForThisColumn = issues
+    .filter((i) => i.status === status)
+    .filter((i) => matchesIssue(i, query));
+  // If you already sort by score/recency, keep that too:
+  // .slice().sort(compareIssuesByScoreThenRecency)
   return (
-    <div className="board-column-container">
-      <ColumnHeader title={status} />
-      {issues
-        .filter((i) => i.status === status)
-        .slice()
-        .sort(compareIssuesByScoreThenRecency)
-        .map((i) => (
-          <IssueCard
-            key={i.id}
-            id={i.id}
-            title={i.title}
-            description={i.description}
-            status={i.status}
-            priority={i.priority}
-            statuses={statuses}
-            onMove={moveIssue}
-            score={i.score}
-          />
-        ))}
+    <div data-status={status} className="board-column-container">
+      {issuesForThisColumn.map((i) => (
+        <IssueCard
+          key={i.id}
+          id={i.id}
+          title={i.title}
+          description={i.description}
+          status={i.status}
+          priority={i.priority}
+          statuses={statuses}
+          onMove={(id, s) => moveIssue(id, s as any)}
+          score={i.score}
+        />
+      ))}
     </div>
   );
 }

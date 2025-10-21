@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import Input from '../atoms/Input';
 
 export default function SearchBar({
   value,
@@ -21,7 +22,7 @@ export default function SearchBar({
   }, [local, onChange, delay]);
 
   return (
-    <input
+    <Input
       type="search"
       value={local}
       onChange={(e) => setLocal(e.target.value)}

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import '../../styles/assigneeAutocomplete.css';
+import Input from '../atoms/Input';
 
 export default function AssigneeAutocomplete({
   value,
@@ -61,7 +62,7 @@ export default function AssigneeAutocomplete({
   return (
     <div className="ac" ref={rootRef}>
       <div className="ac-input-wrap">
-        <input
+        <Input
           className="ac-input"
           type="text"
           role="combobox"

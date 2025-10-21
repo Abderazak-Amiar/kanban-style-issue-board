@@ -1,5 +1,6 @@
 import { useIssuesStore } from '../../store/useIssuesStore';
 import '../../styles/boardColumn.css';
+import { compareIssuesByScoreThenRecency } from '../../utils/score';
 import { matchesIssue } from '../../utils/search';
 import IssueCard from '../moleculs/IssueCard';
 
@@ -21,19 +22,23 @@ export default function BoardColumn({
   // .slice().sort(compareIssuesByScoreThenRecency)
   return (
     <div data-status={status} className="board-column-container">
-      {issuesForThisColumn.map((i) => (
-        <IssueCard
-          key={i.id}
-          id={i.id}
-          title={i.title}
-          description={i.description}
-          status={i.status}
-          priority={i.priority}
-          statuses={statuses}
-          onMove={(id, s) => moveIssue(id, s as any)}
-          score={i.score}
-        />
-      ))}
+      {issuesForThisColumn
+        .slice()
+        .sort(compareIssuesByScoreThenRecency)
+        .map((i) => (
+          <IssueCard
+            key={i.id}
+            id={i.id}
+            title={i.title}
+            description={i.description}
+            status={i.status}
+            priority={i.priority}
+            statuses={statuses as string[]}
+            onMove={(id, s) => moveIssue(id, s as any)}
+            score={i.score}
+            tags={i.tags}
+          />
+        ))}
     </div>
   );
 }

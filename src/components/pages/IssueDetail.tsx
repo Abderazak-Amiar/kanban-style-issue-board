@@ -111,6 +111,16 @@ export default function IssueDetail() {
         )}
       </div>
 
+      {issue.tags && issue.tags.length > 0 && (
+        <div className="issue-detail__tags">
+          {issue.tags.map((t: string) => (
+            <span key={t} className="tag-chip">
+              #{t}
+            </span>
+          ))}
+        </div>
+      )}
+
       {issue.description && (
         <>
           <h3 className="issue-detail__section-title">Description</h3>

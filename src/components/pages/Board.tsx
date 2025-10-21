@@ -4,7 +4,6 @@ import { useIssuesStore } from '../../store/useIssuesStore';
 import '../../styles/board.css';
 import Button from '../atoms/Button';
 import BoardLayout from '../layouts/BoardLayout';
-import SearchBar from '../moleculs/SearchBar';
 import IssueHistorySidebar from '../organisms/IssueHistorySidebar';
 const UNDO_WINDOW_MS = 5000;
 
@@ -12,7 +11,7 @@ export default function BoardPage() {
   const { isAuthenticated, role, logout, username } = useAuthStore();
   const { fetchAll, undoMove, lastMoved, loading, error } = useIssuesStore();
   const [remaining, setRemaining] = useState(0);
-  const [query, setQuery] = useState('');
+  const [query] = useState('');
 
   useEffect(() => {
     fetchAll();
@@ -70,7 +69,6 @@ export default function BoardPage() {
               )}
             </div>
           )}
-          <SearchBar value={query} onChange={setQuery} />
           <BoardLayout query={query} />
           <Activity
             mode={
@@ -90,7 +88,6 @@ export default function BoardPage() {
             </div>
           </Activity>
         </div>
-    
       </div>
     </>
   );

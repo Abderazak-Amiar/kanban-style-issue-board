@@ -64,3 +64,18 @@ export type IssueHistoryState = {
   add: (issue: Pick<Issue, 'id' | 'title' | 'status'>) => void;
   clear: () => void;
 };
+export type HistoryItemTypes = {
+  id: number;
+  title: string;
+  status: string;
+  priority?: string;
+  reason: 'visited' | 'updated';
+  at: string; // ISO timestamp
+};
+
+export type StateType = {
+  items: HistoryItemTypes[];
+  addClicked: (item: Omit<HistoryItemTypes, 'reason' | 'at'>) => void;
+  addUpdated: (item: Omit<HistoryItemTypes, 'reason' | 'at'>) => void;
+  clear: () => void;
+};

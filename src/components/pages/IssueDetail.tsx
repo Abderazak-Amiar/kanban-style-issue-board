@@ -98,27 +98,24 @@ export default function IssueDetail() {
         <span className="meta-chip" title="Assignee">
           Assignee: <strong>{issue.assignee}</strong>
         </span>
+        <span className="meta-chip" title="ID">
+          ID: <strong>{issue.id}</strong>
+        </span>
+        {created && (
+          <span className="meta-chip" title="Created">
+            Created {created}
+          </span>
+        )}
         {updated && (
           <span className="meta-chip meta-chip--muted">Updated {updated}</span>
         )}
       </div>
-      <dl className="issue-detail__details">
-        <div className="detail-row">
-          <dt>ID</dt>
-          <dd>{issue.id}</dd>
-        </div>
-        <div className="detail-row">
-          <dt>Created</dt>
-          <dd>{created ?? '—'}</dd>
-        </div>
-        <div className="detail-row">
-          <dt>Last Updated</dt>
-          <dd>{updated ?? '—'}</dd>
-        </div>
-      </dl>
 
       {issue.description && (
-        <p className="issue-detail__description">{issue.description}</p>
+        <>
+          <h3 className="issue-detail__section-title">Description</h3>
+          <p className="issue-detail__description">{issue.description}</p>
+        </>
       )}
     </div>
   );

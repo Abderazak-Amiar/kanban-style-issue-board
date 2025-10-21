@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuthStore } from '../../store/useAuthStore';
-import '../../styles/LoginForm.css';
+import '../../styles/loginForm.css';
 import Button from '../atoms/Button';
 import Input from '../atoms/Input';
 import Select from '../atoms/Select';

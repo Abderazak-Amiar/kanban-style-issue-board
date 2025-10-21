@@ -4,6 +4,7 @@ import { useSearchStore } from '../../store/useSearchStore';
 import '../../styles/boardColumn.css';
 import { compareIssuesByScoreThenRecency } from '../../utils/score';
 import { matchesAssigneeOrSeverity, matchesIssue } from '../../utils/search';
+import ColumnHeader from '../moleculs/ColumnHeader';
 import IssueCard from '../moleculs/IssueCard';
 
 export default function BoardColumn({
@@ -27,6 +28,7 @@ export default function BoardColumn({
 
   return (
     <div className="board-column-container" data-status={status}>
+      <ColumnHeader title={`${status} (${visibleIssues.length})`} />
       {visibleIssues
         .slice()
         .sort(compareIssuesByScoreThenRecency)

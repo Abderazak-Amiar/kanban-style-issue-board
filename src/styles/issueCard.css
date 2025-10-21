@@ -41,8 +41,24 @@
   justify-content: space-between;
 }
 .ic-badges {
-  display: flex;
-  flex-direction: column;
+  display: inline-flex;
+  flex-direction: column; /* stack score below badges */
+  align-items: flex-end;
   gap: 6px;
-  align-items: end;
+}
+
+.ic-score {
+  margin-top: 2px;
+}
+
+.score-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: #111827;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  padding: 2px 8px;
+  border-radius: 9999px;
 }

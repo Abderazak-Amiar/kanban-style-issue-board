@@ -10,6 +10,7 @@ export const useIssuesStore = create<State>((set, get) => ({
   lastMoved: null,
   loading: false,
   error: null,
+  lastSync: null,
 
   fetchAll: async () => {
     set({ loading: true, error: null });
@@ -20,13 +21,32 @@ export const useIssuesStore = create<State>((set, get) => ({
         status: issue.status as Issue['status'],
         priority: issue.priority as Issue['priority'],
       }));
-      set({ issues: typedData, loading: false, error: null });
+      set({
+        issues: typedData,
+        loading: false,
+        error: null,
+        lastSync: Date.now(),
+      });
     } catch (e) {
       set({
         loading: false,
         error: e instanceof Error ? e.message : 'Failed to load issues',
       });
+    } finally {
+      set({ loading: false });
     }
+  },
+
+  // Simple simulator: bump updatedAt on a random issue
+  simulateRandomUpdate: () => {
+    const prev = get().issues;
+    if (!prev.length) return;
+    const idx = Math.floor(Math.random() * prev.length);
+    const nowIso = new Date().toISOString();
+    const updated = prev.map((i, n) =>
+      n === idx ? { ...i, updatedAt: nowIso } : i
+    );
+    set({ issues: updated });
   },
 
   moveIssue: (id, newStatus) => {
@@ -100,7 +120,6 @@ export const useIssuesStore = create<State>((set, get) => ({
         ),
         lastMoved: null,
       }));
-      // Optionally also persist the undo with saveIssueStatus(lm.id, lm.previousStatus).catch(() => {});
     }
   },
 }));

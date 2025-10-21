@@ -6,6 +6,7 @@ import { useSearchStore } from '../../store/useSearchStore';
 import '../../styles/issueHistory.css';
 import AssigneeAutocomplete from '../moleculs/AssigneeAutocomplete';
 import SearchBar from '../moleculs/SearchBar';
+import Select from '../atoms/Select';
 
 function timeAgo(iso: string) {
   const s = Math.floor((Date.now() - new Date(iso).getTime()) / 1000);
@@ -63,7 +64,7 @@ export default function IssueHistorySidebar() {
 
         <label className="ih-field">
           <span className="ih-label">Severity</span>
-          <select
+          <Select
             className="ih-select"
             value={severity ?? ''}
             onChange={(e) => {
@@ -77,7 +78,7 @@ export default function IssueHistorySidebar() {
             <option value="3">3 (Medium)</option>
             <option value="4">4 (High)</option>
             <option value="5">5 (Critical)</option>
-          </select>
+          </Select>
         </label>
 
         <button className="ih-clear-filters" onClick={clearFilters}>

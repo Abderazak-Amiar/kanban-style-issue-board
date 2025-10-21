@@ -24,7 +24,7 @@ export type Issue = {
   assignee: string;
   createdAt: string;
   updatedAt?: string;
-   tags: string[];
+  tags: string[];
   score: number; // computed at runtime
 };
 
@@ -38,6 +38,7 @@ export type State = {
   lastMoved: { id: number; previousStatus: Issue['status']; at: number } | null;
   loading: boolean;
   error: string | null;
+  lastSync: number | null;
   updatePriority: (id: number, priority: string) => void;
 };
 export type BoardColumnProps = {
@@ -51,10 +52,12 @@ export type IssueCardProps = {
   description?: string;
   status: 'Backlog' | 'In Progress' | 'Done';
   priority: 'low' | 'medium' | 'high';
-  score: number;
   statuses: readonly string[];
   onMove: (id: number, status: 'Backlog' | 'In Progress' | 'Done') => void;
+  score?: number;
+  tags?: string[];
 };
+
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
 export type IssueTitleProps = { children: React.ReactNode };
 export type SelectProps = React.SelectHTMLAttributes<HTMLSelectElement>;
@@ -85,4 +88,14 @@ export type StateType = {
   addClicked: (item: Omit<HistoryItemTypes, 'reason' | 'at'>) => void;
   addUpdated: (item: Omit<HistoryItemTypes, 'reason' | 'at'>) => void;
   clear: () => void;
+};
+export type StateSearch = {
+  query: string;
+  assignee: string; // '' = any
+  severity: number | null; // null = any
+  setQuery: (q: string) => void;
+  setAssignee: (a: string) => void;
+  setSeverity: (s: number | null) => void;
+  clear: () => void;
+  clearFilters: () => void;
 };

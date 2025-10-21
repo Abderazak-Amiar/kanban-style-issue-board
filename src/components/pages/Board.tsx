@@ -1,4 +1,4 @@
-import { Activity, useEffect, useState } from 'react';
+import { Activity, useEffect, useMemo, useState } from 'react';
 import { useAuthStore } from '../../store/useAuthStore';
 import { useIssuesStore } from '../../store/useIssuesStore';
 import '../../styles/board.css';
@@ -6,37 +6,62 @@ import Button from '../atoms/Button';
 import BoardLayout from '../layouts/BoardLayout';
 import IssueHistorySidebar from '../organisms/IssueHistorySidebar';
 const UNDO_WINDOW_MS = 5000;
+const POLL_MS = 10_000;
+
+function timeAgo(ts?: number | null) {
+  if (!ts) return 'never';
+  const s = Math.floor((Date.now() - ts) / 1000);
+  if (s < 60) return `${s}s ago`;
+  const m = Math.floor(s / 60);
+  if (m < 60) return `${m}m ago`;
+  const h = Math.floor(m / 60);
+  if (h < 24) return `${h}h ago`;
+  const d = Math.floor(h / 24);
+  return `${d}d ago`;
+}
 
 export default function BoardPage() {
   const { isAuthenticated, role, logout, username } = useAuthStore();
-  const { fetchAll, undoMove, lastMoved, loading, error } = useIssuesStore();
+  const { fetchAll, undoMove, lastMoved, loading, error, lastSync } =
+    useIssuesStore();
   const [remaining, setRemaining] = useState(0);
-  const [query] = useState('');
+  const [_, setNow] = useState(0); // force re-render each second for timeAgo
 
+  // initial fetch + polling
   useEffect(() => {
-    fetchAll();
+    let mounted = true;
+    const load = async () => {
+      await fetchAll();
+      if (!mounted) return;
+    };
+    load();
+
+    const pollId = window.setInterval(fetchAll, POLL_MS);
+    const tickId = window.setInterval(() => setNow(Date.now()), 1000);
+
+    return () => {
+      mounted = false;
+      clearInterval(pollId);
+      clearInterval(tickId);
+    };
   }, [fetchAll]);
 
-  // Countdown effect
   useEffect(() => {
     if (!lastMoved) {
       setRemaining(0);
       return;
     }
     const end = lastMoved.at + UNDO_WINDOW_MS;
-
-    // countdown 5-0
-    const tick = () => {
-      const ms = Math.max(0, end - Date.now());
-      setRemaining(Math.ceil(ms / 1000));
-    };
-
+    const tick = () =>
+      setRemaining(Math.ceil(Math.max(0, end - Date.now()) / 1000));
     tick();
     const id = window.setInterval(tick, 250);
     return () => window.clearInterval(id);
   }, [lastMoved]);
 
   const canUndo = !!lastMoved && remaining > 0;
+
+  const lastSyncLabel = useMemo(() => timeAgo(lastSync), [lastSync, _]);
 
   return (
     <>
@@ -51,6 +76,18 @@ export default function BoardPage() {
             <div>
               <Button onClick={logout}>Logout</Button>
             </div>
+          </div>
+          <div
+            style={{
+              marginLeft: 'auto',
+              display: 'flex',
+              gap: 12,
+              alignItems: 'center',
+            }}
+          >
+            <span className="meta-chip meta-chip--muted">
+              Last sync: {lastSyncLabel}
+            </span>
           </div>
           {(loading || error) && (
             <div className="fixed-issue-header">
@@ -69,7 +106,7 @@ export default function BoardPage() {
               )}
             </div>
           )}
-          <BoardLayout query={query} />
+          <BoardLayout />
           <Activity
             mode={
               isAuthenticated && role === 'admin' && canUndo

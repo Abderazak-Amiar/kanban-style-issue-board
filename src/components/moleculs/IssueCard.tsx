@@ -2,7 +2,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/useAuthStore';
 import { useIssueHistoryStore } from '../../store/useIssueHistoryStore';
 import '../../styles/issueCard.css';
-import type { IssueCardProps, Priority } from '../../types';
+import type { IssueCardProps } from '../../types';
 import IssueTitle from '../atoms/IssueTitle';
 import PriorityBadge from '../atoms/PriorityBadge';
 import StatusTag from '../atoms/StatusTag';
@@ -15,6 +15,7 @@ export default function IssueCard({
   onMove,
   statuses,
   priority,
+  score,
 }: IssueCardProps) {
   const { isAuthenticated, role } = useAuthStore();
   const navigate = useNavigate();
@@ -37,7 +38,12 @@ export default function IssueCard({
         </div>
         <div className="ic-badges">
           <StatusTag status={status} />
-          <PriorityBadge priority={priority as Priority} />
+          <PriorityBadge priority={priority as 'low' | 'medium' | 'high'} />
+          {typeof score === 'number' && (
+            <div className="ic-score">
+              <span className="score-chip">Score: {score}</span>
+            </div>
+          )}
         </div>
       </div>
 

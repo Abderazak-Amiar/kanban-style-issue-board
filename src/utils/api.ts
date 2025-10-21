@@ -1,5 +1,6 @@
 import issues from '../data/issues.json';
 import type { Issue } from '../types';
+import { computeScore } from './score';
 
 // Simulate a network delay (e.g., 1 second)
 function delay(ms: number) {
@@ -16,11 +17,14 @@ function maybeThrowError() {
 
 // Mock API
 export async function fetchIssues(): Promise<Issue[]> {
+  // Simulate a network delay (e.g., 1 second)
   await delay(1000);
   // maybeThrowError();
+
   return (issues as any[]).map((i) => ({
     ...i,
-    tags: Array.isArray(i.tags) ? i.tags : [], // ensure tags array
+    // runtime score = severity * 10 + (daysSinceCreated * -1) + userDefinedRank
+    score: computeScore(i.severity, i.createdAt, i.userDefinedRank),
   })) as Issue[];
 }
 

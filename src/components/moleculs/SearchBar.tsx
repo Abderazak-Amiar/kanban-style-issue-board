@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import Input from '../atoms/Input';
 
 export default function SearchBar({
   value,
@@ -21,18 +22,13 @@ export default function SearchBar({
   }, [local, onChange, delay]);
 
   return (
-    <input
+    <Input
       type="search"
       value={local}
       onChange={(e) => setLocal(e.target.value)}
       placeholder={placeholder}
       aria-label="Search issues"
-      style={{
-        width: 320,
-        padding: '8px 12px',
-        borderRadius: 8,
-        border: '1px solid #d1d5db',
-      }}
+      className="ac-input"
     />
   );
 }

@@ -1,0 +1,62 @@
+.ac {
+  position: relative;
+  width: 100%; /* match Severity width */
+}
+.ac-input-wrap {
+  position: relative;
+  width: 100%; /* ensure wrapper fills */
+}
+.ac-input {
+  width: 100%; /* fill container */
+  box-sizing: border-box; /* include padding/border in width */
+  padding: 6px 28px 6px 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #fff;
+  color: #111827;
+}
+.ac-input::placeholder {
+  color: #9ca3af;
+}
+.ac-input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.35);
+}
+.ac-clear {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 0;
+  background: transparent;
+  color: #6b7280;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+}
+.ac-menu {
+  position: absolute;
+  z-index: 1000;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  padding: 4px;
+  max-height: 220px;
+  overflow: auto;
+}
+.ac-option {
+  padding: 8px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #111827;
+}
+.ac-option:hover,
+.ac-option.is-active {
+  background: #f1f5f9;
+  color: #111827;
+}

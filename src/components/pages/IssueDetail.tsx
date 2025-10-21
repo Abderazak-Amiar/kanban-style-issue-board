@@ -4,6 +4,7 @@ import { useAuthStore } from '../../store/useAuthStore';
 import { useIssuesStore } from '../../store/useIssuesStore';
 import '../../styles/issueDetail.css';
 import PriorityBadge from '../atoms/PriorityBadge';
+import Select from '../atoms/Select';
 import StatusTag from '../atoms/StatusTag';
 
 export default function IssueDetail() {
@@ -66,7 +67,7 @@ export default function IssueDetail() {
               className="select-wrapper"
               data-priority={(issue.priority || '').toLowerCase()}
             >
-              <select
+              <Select
                 className={`issue-detail__priority-select priority--${(
                   issue.priority || ''
                 ).toLowerCase()}`}
@@ -77,7 +78,7 @@ export default function IssueDetail() {
                 <option value="low">Low</option>
                 <option value="medium">Medium</option>
                 <option value="high">High</option>
-              </select>
+              </Select>
             </div>
           )}
         </div>

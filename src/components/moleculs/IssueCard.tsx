@@ -2,21 +2,10 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/useAuthStore';
 import { useIssueHistoryStore } from '../../store/useIssueHistoryStore';
 import '../../styles/issueCard.css';
+import type { IssueCardProps } from '../../types';
 import IssueTitle from '../atoms/IssueTitle';
 import PriorityBadge from '../atoms/PriorityBadge';
 import StatusTag from '../atoms/StatusTag';
-
-type IssueCardProps = {
-  id: number;
-  title: string;
-  description?: string;
-  status: 'Backlog' | 'In Progress' | 'Done';
-  priority: 'low' | 'medium' | 'high';
-  statuses: readonly string[];
-  onMove: (id: number, status: 'Backlog' | 'In Progress' | 'Done') => void;
-  score?: number;
-  tags?: string[];
-};
 
 export default function IssueCard({
   id,

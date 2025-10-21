@@ -24,6 +24,7 @@ export type Issue = {
   assignee: string;
   createdAt: string;
   updatedAt?: string;
+   tags: string[];
   score: number; // computed at runtime
 };
 

@@ -1,28 +1,33 @@
+import { useMemo } from 'react';
 import { useIssuesStore } from '../../store/useIssuesStore';
+import { useSearchStore } from '../../store/useSearchStore';
 import '../../styles/boardColumn.css';
 import { compareIssuesByScoreThenRecency } from '../../utils/score';
-import { matchesIssue } from '../../utils/search';
+import { matchesAssigneeOrSeverity, matchesIssue } from '../../utils/search';
 import IssueCard from '../moleculs/IssueCard';
 
 export default function BoardColumn({
   status,
   statuses,
-  query,
 }: {
-  status: string;
-  statuses: string[];
-  query: string;
+  status: 'Backlog' | 'In Progress' | 'Done';
+  statuses: readonly string[];
 }) {
   const { issues, moveIssue } = useIssuesStore();
+  const query = useSearchStore((s) => s.query);
+  const assignee = useSearchStore((s) => s.assignee);
+  const severity = useSearchStore((s) => s.severity);
 
-  const issuesForThisColumn = issues
-    .filter((i) => i.status === status)
-    .filter((i) => matchesIssue(i, query));
-  // If you already sort by score/recency, keep that too:
-  // .slice().sort(compareIssuesByScoreThenRecency)
+  const visibleIssues = useMemo(() => {
+    return issues
+      .filter((i) => i.status === status)
+      .filter((i) => matchesIssue(i, query))
+      .filter((i) => matchesAssigneeOrSeverity(i, assignee, severity));
+  }, [issues, status, query, assignee, severity]);
+
   return (
-    <div data-status={status} className="board-column-container">
-      {issuesForThisColumn
+    <div className="board-column-container" data-status={status}>
+      {visibleIssues
         .slice()
         .sort(compareIssuesByScoreThenRecency)
         .map((i) => (

@@ -27,12 +27,7 @@ export default function SearchBar({
       onChange={(e) => setLocal(e.target.value)}
       placeholder={placeholder}
       aria-label="Search issues"
-      style={{
-        width: 320,
-        padding: '8px 12px',
-        borderRadius: 8,
-        border: '1px solid #d1d5db',
-      }}
+      className="ac-input"
     />
   );
 }
